@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoiceIQ — Omnichannel Customer Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A1628;
+    --navy-mid: #0D1F3C;
+    --navy-light: #132847;
+    --card: #112240;
+    --teal: #00C9A7;
+    --teal-dark: #009E83;
+    --teal-glow: rgba(0,201,167,0.15);
+    --gold: #FFD166;
+    --warn: #FF6B6B;
+    --white: #FFFFFF;
+    --off-white: #E8EFF8;
+    --muted: #8BA3C1;
+    --border: rgba(0,201,167,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--off-white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND GRID ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,201,167,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,201,167,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── LAYOUT ── */
+  .shell {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 56px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    grid-column: 1 / -1;
+    background: rgba(10,22,40,0.95);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 28px; height: 28px;
+    background: var(--teal);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-icon svg { width: 16px; height: 16px; }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--teal); }
+
+  .topbar-center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,201,167,0.08);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .topbar-center span {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .agent-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .agent-avatar {
+    width: 28px; height: 28px;
+    background: var(--navy-light);
+    border: 2px solid var(--teal);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: rgba(13,31,60,0.8);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebar-section {
+    padding: 0 16px;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px;
+    margin-bottom: 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .nav-item:hover { background: var(--teal-glow); color: var(--off-white); }
+  .nav-item.active {
+    background: var(--teal-glow);
+    color: var(--teal);
+    font-weight: 500;
+    border: 1px solid var(--border);
+  }
+
+  .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--warn);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+
+  .nav-badge.teal { background: var(--teal); color: var(--navy); }
+
+  .sidebar-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 16px;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+
+  .page-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-teal {
+    background: var(--teal);
+    color: var(--navy);
+  }
+  .btn-teal:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--off-white); border-color: var(--teal); }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .stat-card:hover { transform: translateY(-2px); }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent, var(--teal));
+  }
+
+  .stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-value span { color: var(--accent, var(--teal)); }
+
+  .stat-delta {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .stat-delta.up { color: var(--teal); }
+  .stat-delta.down { color: var(--warn); }
+
+  /* ── MAIN GRID ── */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 16px;
+    align-items: start;
+  }
+
+  /* ── ACTIVE CALL PANEL ── */
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 1.5s infinite;
+  }
+
+  .panel-body { padding: 18px; }
+
+  /* ── CALL INFO ── */
+  .call-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .caller-avatar {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--teal-dark), var(--navy-light));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--teal);
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+  }
+
+  .caller-details { flex: 1; }
+
+  .caller-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .caller-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .call-timer {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal);
+    background: var(--teal-glow);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── TRANSCRIPT ── */
+  .transcript-area {
+    background: rgba(10,22,40,0.6);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    min-height: 130px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .transcript-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .transcript-line {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .transcript-who {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-top: 2px;
+    min-width: 52px;
+  }
+
+  .transcript-who.agent { color: var(--teal); }
+  .transcript-who.customer { color: var(--gold); }
+
+  .transcript-text {
+    font-size: 12.5px;
+    color: var(--off-white);
+    line-height: 1.5;
+  }
+
+  .transcript-text .highlight {
+    background: rgba(255,107,107,0.15);
+    color: var(--warn);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-weight: 500;
+  }
+
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .typing-dot {
+    width: 5px; height: 5px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: typingBounce 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typingBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* ── DETECTED SIGNALS ── */
+  .signals-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .signal-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .signal-chip.warn {
+    background: rgba(255,107,107,0.1);
+    color: var(--warn);
+    border-color: rgba(255,107,107,0.3);
+  }
+
+  .signal-chip.gold {
+    background: rgba(255,209,102,0.1);
+    color: var(--gold);
+    border-color: rgba(255,209,102,0.3);
+  }
+
+  .signal-chip.teal {
+    background: var(--teal-glow);
+    color: var(--teal);
+    border-color: var(--border);
+  }
+
+  .signal-chip svg { width: 10px; height: 10px; }
+
+  /* ── CHURN SCORE ── */
+  .churn-score-card {
+    background: rgba(10,22,40,0.8);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+
+  .churn-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .churn-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .churn-delta {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 600;
+    background: var(--teal-glow);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .churn-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .churn-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .churn-bar-label {
+    font-size: 10px;
+    color: var(--muted);
+    width: 100px;
+    flex-shrink: 0;
+  }
+
+  .churn-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .churn-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  .churn-bar-fill.behavioral { background: var(--muted); width: 61%; }
+  .churn-bar-fill.voiceiq { background: var(--warn); width: 87%; }
+
+  .churn-bar-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    width: 34px;
+    text-align: right;
+  }
+
+  .churn-bar-pct.behavioral { color: var(--muted); }
+  .churn-bar-pct.voiceiq { color: var(--warn); }
+
+  /* ── RECOMMENDATION CARD ── */
+  .rec-card {
+    background: linear-gradient(135deg, rgba(0,201,167,0.08), rgba(0,201,167,0.02));
+    border: 1px solid rgba(0,201,167,0.3);
+    border-radius: 10px;
+    padding: 14px;
+  }
+
+  .rec-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .rec-icon {
+    width: 28px; height: 28px;
+    background: var(--teal);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .rec-icon svg { width: 14px; height: 14px; }
+
+  .rec-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  .rec-text {
+    font-size: 12.5px;
+    color: var(--off-white);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .rec-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .rec-btn {
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .rec-btn.primary {
+    background: var(--teal);
+    color: var(--navy);
+  }
+  .rec-btn.primary:hover { background: var(--teal-dark); }
+
+  .rec-btn.secondary {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .rec-btn.secondary:hover { color: var(--off-white); }
+
+  /* ── RIGHT SIDEBAR ── */
+  .right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ── SHAP PANEL ── */
+  .shap-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .shap-label {
+    font-size: 11px;
+    color: var(--off-white);
+    width: 145px;
+    flex-shrink: 0;
+  }
+
+  .shap-bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .shap-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--teal);
+  }
+
+  .shap-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--teal);
+    width: 28px;
+    text-align: right;
+  }
+
+  .shap-verdict {
+    background: rgba(0,201,167,0.06);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11.5px;
+    color: var(--off-white);
+    line-height: 1.5;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ── CHANNELS PANEL ── */
+  .channel-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .channel-item:last-child { border-bottom: none; }
+
+  .channel-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .channel-icon svg { width: 16px; height: 16px; }
+
+  .channel-icon.whatsapp { background: rgba(37,211,102,0.15); }
+  .channel-icon.call { background: rgba(0,201,167,0.15); }
+  .channel-icon.sms { background: rgba(255,209,102,0.15); }
+
+  .channel-info { flex: 1; }
+
+  .channel-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--off-white);
+  }
+
+  .channel-msg {
+    font-size: 10.5px;
+    color: var(--muted);
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+
+  .channel-time {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* ── SUBSCRIBER HISTORY ── */
+  .hist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 11px;
+  }
+
+  .hist-item:last-child { border-bottom: none; }
+
+  .hist-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .hist-text { color: var(--off-white); line-height: 1.4; }
+  .hist-date { color: var(--muted); font-size: 10px; margin-top: 2px; }
+
+  /* ── BOTTOM QUEUE ── */
+  .queue-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .queue-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .queue-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+
+  .queue-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .queue-issue {
+    font-size: 10.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .queue-risk {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .risk-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .risk-badge.high { background: rgba(255,107,107,0.15); color: var(--warn); }
+  .risk-badge.med { background: rgba(255,209,102,0.15); color: var(--gold); }
+  .risk-badge.low { background: var(--teal-glow); color: var(--teal); }
+
+  .risk-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .risk-pct.high { color: var(--warn); }
+  .risk-pct.med { color: var(--gold); }
+  .risk-pct.low { color: var(--teal); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── ANIMATE IN ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.2s; }
+  .fade-up:nth-child(3) { animation-delay: 0.3s; }
+  .fade-up:nth-child(4) { animation-delay: 0.4s; }
+
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,201,167,0.06), transparent);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    to { left: 200%; }
+  }
+
+  /* DEMO LABEL */
+  .demo-banner {
+    background: rgba(0,201,167,0.08);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 11px;
+    color: var(--teal);
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .demo-banner span { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5" stroke-linecap="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </div>
+      <span class="logo-text">Voice<span>IQ</span></span>
+    </div>
+
+    <div class="topbar-center">
+      <div class="live-dot"></div>
+      <span>Live Intelligence Active</span>
+    </div>
+
+    <div class="topbar-right">
+      <div class="agent-badge">
+        <div class="agent-avatar">AO</div>
+        <div>
+          <div style="color:var(--off-white);font-size:12px;font-weight:500;">Agent Amaka</div>
+          <div style="font-size:10px;">MTN Support — Lagos</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Live Dashboard
+        <span class="nav-badge teal">1</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        Call Queue
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        WhatsApp & SMS
+        <span class="nav-badge">7</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Churn Analytics
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Intelligence</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        SHAP Explainer
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Subscriber Profiles
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Session History
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">System</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        NLP Model Status
+        <span class="nav-badge teal">OK</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Settings
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- Demo banner -->
+    <div class="demo-banner">
+      🎯 VoiceIQ Prototype Demo &nbsp;·&nbsp; <span>AI4Telco Hackathon — Microsoft AI Skills Week Lagos 2026 — Team Overclock</span>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header fade-up">
+      <div>
+        <div class="page-title">Live Agent Dashboard</div>
+        <div class="page-sub">Real-time intelligence · Nigerian Pidgin NLP active · XGBoost churn model v2.1</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost">Export Report</button>
+        <button class="btn btn-teal">+ New Session</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card fade-up shimmer" style="--accent: var(--teal);">
+        <div class="stat-label">Calls Today</div>
+        <div class="stat-value"><span>247</span></div>
+        <div class="stat-delta up">↑ 12% vs yesterday</div>
+      </div>
+      <div class="stat-card fade-up shimmer" style="--accent: var(--warn);">
+        <div class="stat-label">High Churn Risk</div>
+        <div class="stat-value"><span style="color:var(--warn);">34</span></div>
+        <div class="stat-delta down">↑ 8 flagged this hour</div>
+      </div>
+      <div class="stat-card fade-up shimmer" style="--accent: var(--gold);">
+        <div class="stat-label">Avg Churn Score</div>
+        <div class="stat-value"><span style="color:var(--gold);">61<span style="font-size:16px;">%</span></span></div>
+        <div class="stat-delta">Behavioral model baseline</div>
+      </div>
+      <div class="stat-card fade-up shimmer" style="--accent: var(--teal);">
+        <div class="stat-label">Interventions Sent</div>
+        <div class="stat-value"><span>19</span></div>
+        <div class="stat-delta up">↑ 73% acceptance rate</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="content-grid">
+
+      <!-- LEFT: Active Call -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <div class="dot"></div>
+              Active Call — VoiceIQ Analysing
+            </div>
+            <span style="font-size:11px;color:var(--muted);">Channel: Voice + WhatsApp history</span>
+          </div>
+          <div class="panel-body">
+
+            <!-- Caller -->
+            <div class="call-info">
+              <div class="caller-avatar">CO</div>
+              <div class="caller-details">
+                <div class="caller-name">Chioma Okonkwo</div>
+                <div class="caller-meta">+234 803 ••• 4471 · MTN Subscriber · Lagos Island · 4 years</div>
+              </div>
+              <div class="call-timer">02:34</div>
+            </div>
+
+            <!-- Transcript -->
+            <div class="transcript-area">
+              <div class="transcript-label">Live Transcript — Pidgin NLP Active</div>
+              <div class="transcript-line">
+                <span class="transcript-who agent">Agent</span>
+                <span class="transcript-text">Good afternoon, thank you for calling MTN support. How may I help you today?</span>
+              </div>
+              <div class="transcript-line">
+                <span class="transcript-who customer">Chioma</span>
+                <span class="transcript-text">Abeg <span class="highlight">my data don finish again</span>. I don buy am twice this week and e just dey disappear.</span>
+              </div>
+              <div class="transcript-line">
+                <span class="transcript-who agent">Agent</span>
+                <span class="transcript-text">I sincerely apologise for the inconvenience. Let me check your account right away.</span>
+              </div>
+              <div class="transcript-line">
+                <span class="transcript-who customer">Customer</span>
+                <span class="transcript-text">This is the <span class="highlight">third time I dey call</span> this week o. To be honest <span class="highlight">I wan port go Airtel</span> if una no fix this today.</span>
+              </div>
+              <div class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <span style="font-size:10px;color:var(--muted);margin-left:4px;">VoiceIQ transcribing...</span>
+              </div>
+            </div>
+
+            <!-- Signals -->
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Detected Signals</div>
+            <div class="signals-row">
+              <div class="signal-chip warn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                Port Intent Detected
+              </div>
+              <div class="signal-chip warn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                3rd Call This Week
+              </div>
+              <div class="signal-chip gold">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Competitor Mentioned
+              </div>
+              <div class="signal-chip warn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Recurring Data Complaint
+              </div>
+              <div class="signal-chip teal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                High Frustration Score
+              </div>
+            </div>
+
+            <!-- Churn Score -->
+            <div class="churn-score-card">
+              <div class="churn-header">
+                <span class="churn-title">Churn Risk Score</span>
+                <span class="churn-delta">+26pts with conversational layer</span>
+              </div>
+              <div class="churn-bars">
+                <div class="churn-bar-row">
+                  <span class="churn-bar-label">Behavioral only</span>
+                  <div class="churn-bar-track">
+                    <div class="churn-bar-fill behavioral"></div>
+                  </div>
+                  <span class="churn-bar-pct behavioral">61%</span>
+                </div>
+                <div class="churn-bar-row">
+                  <span class="churn-bar-label">VoiceIQ (full signal)</span>
+                  <div class="churn-bar-track">
+                    <div class="churn-bar-fill voiceiq"></div>
+                  </div>
+                  <span class="churn-bar-pct voiceiq">87%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recommendation -->
+            <div class="rec-card">
+              <div class="rec-header">
+                <div class="rec-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <span class="rec-title">AI Recommendation — Agent Reviews & Acts</span>
+              </div>
+              <div class="rec-text">
+                <strong>High churn risk subscriber.</strong> Offer complimentary <strong>1GB data bundle</strong> as immediate goodwill gesture. Escalate to retention team for 30-day loyalty package. Acknowledge repeat contact — apologise specifically for recurring data issue.
+              </div>
+              <div class="rec-actions">
+                <button class="rec-btn primary">Apply Offer</button>
+                <button class="rec-btn secondary">Escalate to Retention</button>
+                <button class="rec-btn secondary">Override</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Queue -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Incoming Queue — Churn-Prioritised</div>
+            <span style="font-size:11px;color:var(--muted);">3 pending · sorted by risk</span>
+          </div>
+          <div class="panel-body">
+            <div class="queue-row">
+              <div class="queue-card">
+                <div class="queue-name">Emeka A.</div>
+                <div class="queue-issue">Network complaint · SMS channel</div>
+                <div class="queue-risk">
+                  <span class="risk-badge high">HIGH RISK</span>
+                  <span class="risk-pct high">79%</span>
+                </div>
+              </div>
+              <div class="queue-card">
+                <div class="queue-name">Fatima B.</div>
+                <div class="queue-issue">Billing dispute · WhatsApp</div>
+                <div class="queue-risk">
+                  <span class="risk-badge med">MEDIUM</span>
+                  <span class="risk-pct med">54%</span>
+                </div>
+              </div>
+              <div class="queue-card">
+                <div class="queue-name">Tunde O.</div>
+                <div class="queue-issue">Data query · Voice call</div>
+                <div class="queue-risk">
+                  <span class="risk-badge low">LOW RISK</span>
+                  <span class="risk-pct low">23%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COL -->
+      <div class="right-col">
+
+        <!-- SHAP Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">SHAP Explainability</div>
+            <span style="font-size:10px;color:var(--teal);">Why 87%?</span>
+          </div>
+          <div class="panel-body">
+            <div class="shap-row">
+              <span class="shap-label">Port intent ("wan port")</span>
+              <div class="shap-bar-track"><div class="shap-bar-fill" style="width:92%;background:var(--warn);"></div></div>
+              <span class="shap-val" style="color:var(--warn);">+.31</span>
+            </div>
+            <div class="shap-row">
+              <span class="shap-label">Repeat contact (3x)</span>
+              <div class="shap-bar-track"><div class="shap-bar-fill" style="width:80%;background:var(--warn);"></div></div>
+              <span class="shap-val" style="color:var(--warn);">+.24</span>
+            </div>
+            <div class="shap-row">
+              <span class="shap-label">No recharge 9 days</span>
+              <div class="shap-bar-track"><div class="shap-bar-fill" style="width:72%;"></div></div>
+              <span class="shap-val">+.19</span>
+            </div>
+            <div class="shap-row">
+              <span class="shap-label">Competitor mention</span>
+              <div class="shap-bar-track"><div class="shap-bar-fill" style="width:65%;background:var(--gold);"></div></div>
+              <span class="shap-val" style="color:var(--gold);">+.17</span>
+            </div>
+            <div class="shap-row">
+              <span class="shap-label">Data usage drop 68%</span>
+              <div class="shap-bar-track"><div class="shap-bar-fill" style="width:55%;"></div></div>
+              <span class="shap-val">+.14</span>
+            </div>
+            <div class="shap-row">
+              <span class="shap-label">High sentiment score</span>
+              <div class="shap-bar-track"><div class="shap-bar-fill" style="width:42%;"></div></div>
+              <span class="shap-val">+.09</span>
+            </div>
+            <div class="shap-verdict">
+              "Chioma is at high churn risk because she explicitly stated intent to port, has contacted support 3 times this week, and has not recharged in 9 days. Immediate retention action recommended."
+            </div>
+          </div>
+        </div>
+
+        <!-- Omnichannel History -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Omnichannel History</div>
+            <span style="font-size:11px;color:var(--muted);">Last 7 days</span>
+          </div>
+          <div class="panel-body">
+            <div class="channel-item">
+              <div class="channel-icon whatsapp">
+                <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              </div>
+              <div class="channel-info">
+                <div class="channel-name">WhatsApp</div>
+                <div class="channel-msg">"Abeg this data don finish again..."</div>
+              </div>
+              <div class="channel-time">2h ago</div>
+            </div>
+            <div class="channel-item">
+              <div class="channel-icon call">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.61 4.87 2 2 0 0 1 3.59 2.68h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6.29 6.29l.91-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div class="channel-info">
+                <div class="channel-name">Voice Call</div>
+                <div class="channel-msg">3:42 — Data complaint, unresolved</div>
+              </div>
+              <div class="channel-time">Yesterday</div>
+            </div>
+            <div class="channel-item">
+              <div class="channel-icon sms">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="channel-info">
+                <div class="channel-name">SMS</div>
+                <div class="channel-msg">"MTN network bad since morning"</div>
+              </div>
+              <div class="channel-time">3 days ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscriber Behavioural Signals -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Behavioural Signals</div>
+            <span style="font-size:11px;color:var(--muted);">Last 30 days</span>
+          </div>
+          <div class="panel-body">
+            <div class="hist-item">
+              <div class="hist-dot" style="background:var(--warn);"></div>
+              <div>
+                <div class="hist-text">No recharge in <strong>9 days</strong> — unusual pattern</div>
+                <div class="hist-date">Flagged by model</div>
+              </div>
+            </div>
+            <div class="hist-item">
+              <div class="hist-dot" style="background:var(--warn);"></div>
+              <div>
+                <div class="hist-text">Data usage dropped <strong>68%</strong> this week</div>
+                <div class="hist-date">Compared to 30-day average</div>
+              </div>
+            </div>
+            <div class="hist-item">
+              <div class="hist-dot" style="background:var(--gold);"></div>
+              <div>
+                <div class="hist-text"><strong>3 support contacts</strong> in 7 days</div>
+                <div class="hist-date">All data-related complaints</div>
+              </div>
+            </div>
+            <div class="hist-item">
+              <div class="hist-dot" style="background:var(--teal);"></div>
+              <div>
+                <div class="hist-text">Subscriber for <strong>4 years</strong> — high LTV</div>
+                <div class="hist-date">Avg ₦2,400/month ARPU</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
