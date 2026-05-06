@@ -27,6 +27,9 @@ export default function AudioMessage({ msg, onChurnUpdate }) {
 
   const words = msg.transcript?.split(' ') ?? []
 
+  // Words to highlight as churn signals
+  const signalWords = ['heck', 'fucking', 'poor', 'frustrated', 'frustration', '10 days', 'wrong']
+
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
@@ -218,8 +221,7 @@ export default function AudioMessage({ msg, onChurnUpdate }) {
               </div>
               <p className="font-plex text-[12px] text-text-secondary leading-relaxed italic">
                 {words.slice(0, revealedWords).map((word, i) => {
-                  // Highlight churn-signal words
-                  const isSignal = ['port', 'Airtel', 'tire', 'headache', 'finish', 'twice'].includes(word.replace(/[.,!?]/g, ''))
+                  const isSignal = signalWords.some(s => word.toLowerCase().includes(s.toLowerCase()))
                   return (
                     <motion.span
                       key={i}
