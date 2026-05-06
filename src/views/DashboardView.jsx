@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Shell from '../components/layout/Shell'
-import CallerCard from '../components/dashboard/CallerCard'
-import LiveTranscript from '../components/dashboard/LiveTranscript'
+import LiveCallPlayer from '../components/dashboard/LiveCallPlayer'
 import SignalStrip from '../components/dashboard/SignalStrip'
 import ChurnScoreCard from '../components/dashboard/ChurnScoreCard'
 import NetworkDiagram from '../components/dashboard/NetworkDiagram'
@@ -19,19 +18,44 @@ const fadeUp = {
   show: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.4, ease: 'easeOut' } }),
 }
 
+// Churn starts at behavioral baseline (61), increments as signals fire
+const BASE_CHURN = { behavioral: 61, voiceiq: 61, delta: 0 }
+
 export default function DashboardView() {
-  const [pulsedShap,    setPulsedShap]    = useState(null)
-  const [voiceResult,   setVoiceResult]   = useState(null)
+  const [pulsedShap,   setPulsedShap]   = useState(null)
+  const [liveSignals,  setLiveSignals]  = useState([])
+  const [churnScores,  setChurnScores]  = useState(BASE_CHURN)
 
   function handleNodeClick(nodeId) {
     setPulsedShap(nodeId)
     setTimeout(() => setPulsedShap(null), 300)
   }
 
-  // When VoicePanel returns a Groq result, surface it in the SHAP panel
-  function handleVoiceResult(result) {
-    setVoiceResult(result)
+  // Called by LiveCallPlayer each time a Chioma line fires
+  function handleChurnUpdate(delta) {
+    if (delta === -1) {
+      // Reset signal from player restart
+      setChurnScores(BASE_CHURN)
+      setLiveSignals([])
+      return
+    }
+    setChurnScores(prev => {
+      const next = Math.min(87, prev.voiceiq + delta)
+      return { behavioral: 61, voiceiq: next, delta: next - 61 }
+    })
   }
+
+  function handleSignal(signal) {
+    setLiveSignals(prev => {
+      if (prev.find(s => s.label === signal.label)) return prev
+      return [...prev, { ...signal, id: prev.length + 1 }]
+    })
+  }
+
+  // Merge live signals with static ones — live ones appear first
+  const displaySignals = liveSignals.length > 0
+    ? [...liveSignals, ...activeCall.signals.filter(s => !liveSignals.find(l => l.label === s.label))]
+    : activeCall.signals
 
   return (
     <Shell title="Live Agent Dashboard" subtitle="ACTIVE CALL · CHIOMA OKONKWO · MTN NIGERIA">
@@ -42,18 +66,26 @@ export default function DashboardView() {
           {/* Col 1 — Active Call */}
           <motion.div className="flex flex-col gap-3" initial="hidden" animate="show">
             <motion.div custom={0} variants={fadeUp}>
-              <CallerCard subscriber={activeCall.subscriber} />
+              <LiveCallPlayer
+                subscriber={activeCall.subscriber}
+                onChurnUpdate={handleChurnUpdate}
+                onSignal={handleSignal}
+              />
             </motion.div>
             <motion.div custom={1} variants={fadeUp}>
-              <LiveTranscript transcript={activeCall.transcript} />
-            </motion.div>
-            <motion.div custom={2} variants={fadeUp}>
               <Panel>
                 <PanelHeader>
-                  <span className="font-mono text-[10px] text-text-secondary tracking-widest uppercase">Detected Signals</span>
+                  <span className="font-mono text-[10px] text-text-secondary tracking-widest uppercase">
+                    Detected Signals
+                  </span>
+                  {liveSignals.length > 0 && (
+                    <span className="font-mono text-[9px] text-risk-critical bg-[rgba(248,113,113,0.1)] border border-risk-critical/30 px-1.5 py-0.5 rounded animate-pulse">
+                      {liveSignals.length} LIVE
+                    </span>
+                  )}
                 </PanelHeader>
                 <div className="p-3">
-                  <SignalStrip signals={activeCall.signals} />
+                  <SignalStrip signals={displaySignals} />
                 </div>
               </Panel>
             </motion.div>
@@ -62,7 +94,8 @@ export default function DashboardView() {
           {/* Col 2 — Intelligence */}
           <motion.div className="flex flex-col gap-3" initial="hidden" animate="show">
             <motion.div custom={1} variants={fadeUp}>
-              <ChurnScoreCard churnScores={activeCall.churnScores} />
+              {/* Live churn score card — updates as audio plays */}
+              <ChurnScoreCard churnScores={churnScores} />
             </motion.div>
             <motion.div custom={2} variants={fadeUp}>
               <NetworkDiagram nodes={activeCall.networkNodes} onNodeClick={handleNodeClick} />
@@ -84,7 +117,9 @@ export default function DashboardView() {
             <motion.div custom={2} variants={fadeUp}>
               <Panel>
                 <PanelHeader>
-                  <span className="font-mono text-[10px] text-text-secondary tracking-widest uppercase">Subscriber Context</span>
+                  <span className="font-mono text-[10px] text-text-secondary tracking-widest uppercase">
+                    Subscriber Context
+                  </span>
                 </PanelHeader>
                 <div className="p-4">
                   <SubscriberContext
@@ -95,7 +130,7 @@ export default function DashboardView() {
               </Panel>
             </motion.div>
             <motion.div custom={3} variants={fadeUp}>
-              <VoicePanel onResult={handleVoiceResult} />
+              <VoicePanel onResult={() => {}} />
             </motion.div>
           </motion.div>
         </div>
