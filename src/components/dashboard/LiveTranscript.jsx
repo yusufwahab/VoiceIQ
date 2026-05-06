@@ -96,7 +96,7 @@ export default function LiveTranscript({ transcript }) {
       {/* Footer */}
       <div className="border-t border-border-default pt-2">
         <span className="font-mono text-[9px] text-text-muted">
-          Azure Speech + Whisper · Pidgin model active
+          Groq Whisper · Pidgin model active · llama3-70b-8192
         </span>
       </div>
     </div>

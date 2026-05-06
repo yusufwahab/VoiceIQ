@@ -218,6 +218,27 @@ export const inbox = {
       text: 'Data complaint · Frustration: High · Churn signal: +0.14',
     },
     {
+      id: 'a1',
+      type: 'audio',
+      sender: 'Chioma Okonkwo',
+      timestamp: '10:15 AM',
+      duration: '0:42',
+      audioSrc: '/Voiceiq_audio.mp4',
+      transcript: 'This is the second time this week o. MTN network dey give me serious headache. I don recharge twice and the data just dey finish like water. Abeg una need to fix this thing or I go port go Airtel. I don tire for this network.',
+      detection: {
+        signals: [
+          { label: 'Repeat Complaint', severity: 'critical' },
+          { label: 'Port Intent', severity: 'critical' },
+          { label: 'High Frustration', severity: 'critical' },
+          { label: 'Competitor Mention', severity: 'amber' },
+        ],
+        summary: 'Repeat complaint · Frustration: High · Churn signal: +0.24 · Port intent detected',
+        churnDelta: '+0.24',
+        riskLevel: 'critical',
+        riskScore: 87,
+      },
+    },
+    {
       id: 'm2',
       type: 'subscriber',
       text: 'This is the second time this week. MTN network sef dey give me headache.',

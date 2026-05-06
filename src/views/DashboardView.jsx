@@ -11,6 +11,7 @@ import RecommendationCard from '../components/dashboard/RecommendationCard'
 import SubscriberContext from '../components/dashboard/SubscriberContext'
 import CallQueue from '../components/dashboard/CallQueue'
 import Panel, { PanelHeader } from '../components/ui/Panel'
+import VoicePanel from '../components/voice/VoicePanel'
 import { activeCall, callQueue } from '../data/mock'
 
 const fadeUp = {
@@ -19,11 +20,17 @@ const fadeUp = {
 }
 
 export default function DashboardView() {
-  const [pulsedShap, setPulsedShap] = useState(null)
+  const [pulsedShap,    setPulsedShap]    = useState(null)
+  const [voiceResult,   setVoiceResult]   = useState(null)
 
   function handleNodeClick(nodeId) {
     setPulsedShap(nodeId)
     setTimeout(() => setPulsedShap(null), 300)
+  }
+
+  // When VoicePanel returns a Groq result, surface it in the SHAP panel
+  function handleVoiceResult(result) {
+    setVoiceResult(result)
   }
 
   return (
@@ -72,19 +79,24 @@ export default function DashboardView() {
             </motion.div>
           </motion.div>
 
-          {/* Col 3 — Subscriber Context */}
-          <motion.div custom={2} variants={fadeUp} initial="hidden" animate="show">
-            <Panel>
-              <PanelHeader>
-                <span className="font-mono text-[10px] text-text-secondary tracking-widest uppercase">Subscriber Context</span>
-              </PanelHeader>
-              <div className="p-4">
-                <SubscriberContext
-                  subscriber={activeCall.subscriber}
-                  sparkline={activeCall.sparkline}
-                />
-              </div>
-            </Panel>
+          {/* Col 3 — Subscriber Context + Voice */}
+          <motion.div className="flex flex-col gap-3" initial="hidden" animate="show">
+            <motion.div custom={2} variants={fadeUp}>
+              <Panel>
+                <PanelHeader>
+                  <span className="font-mono text-[10px] text-text-secondary tracking-widest uppercase">Subscriber Context</span>
+                </PanelHeader>
+                <div className="p-4">
+                  <SubscriberContext
+                    subscriber={activeCall.subscriber}
+                    sparkline={activeCall.sparkline}
+                  />
+                </div>
+              </Panel>
+            </motion.div>
+            <motion.div custom={3} variants={fadeUp}>
+              <VoicePanel onResult={handleVoiceResult} />
+            </motion.div>
           </motion.div>
         </div>
 

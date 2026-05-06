@@ -13,7 +13,7 @@ export default function InboxView() {
     <Shell title="Omnichannel Inbox" subtitle="VOICE · WHATSAPP · SMS · SORTED BY CHURN RISK">
       <motion.div
         className="bg-bg-surface border border-border-default rounded-xl overflow-hidden"
-        style={{ height: 'calc(100vh - 120px)', display: 'grid', gridTemplateColumns: '320px 1fr' }}
+        style={{ height: 'calc(100vh - 160px)', display: 'grid', gridTemplateColumns: '320px 1fr' }}
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -23,9 +23,10 @@ export default function InboxView() {
           activeId={activeId}
           onSelect={setActiveId}
         />
+        {/* key forces full remount when switching conversations — resets import state */}
         <ConversationThread
+          key={activeConv.id}
           conversation={activeConv}
-          thread={inbox.activeThread}
           suggestedReply={inbox.suggestedReply}
         />
       </motion.div>
