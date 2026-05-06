@@ -11,19 +11,17 @@
  */
 
 import { useState, useRef, useEffect } from 'react'
-import { RotateCcw, Radio, Loader2 } from 'lucide-react'
+import { RotateCcw, Radio } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { transcribeAudio } from '../../services/whisper'
-import { analyseTranscript } from '../../services/groq'
 
 const WAVE_HEIGHTS = [3,5,9,14,20,17,11,7,13,19,25,21,15,9,5,11,17,23,19,13,7,15,21,17,11,5,9,15,7,3,5,8,13,18,22,16,10,6,12,18]
 
-// Fallback transcript used if Groq Whisper is unavailable (no API key / network error)
-const FALLBACK_LINES = [
-  { id: 1, speaker: 'Agent',  text: 'Good afternoon, thank you for calling MTN support. My name is Amaka, how may I assist you today?', highlights: [] },
-  { id: 2, speaker: 'Chioma', text: 'Abeg my data don finish again. I don buy am twice this week and e still dey finish fast fast.', highlights: ['my data don finish again'] },
-  { id: 3, speaker: 'Agent',  text: 'I sincerely apologise for the inconvenience. Let me check your account right away.', highlights: [] },
-  { id: 4, speaker: 'Chioma', text: 'This is the third time I dey call this week o. I wan port go Airtel if una no fix this today.', highlights: ['third time I dey call', 'port go Airtel'] },
+// Fixed dashboard transcript — exact lines matched to the audio
+const DASHBOARD_TRANSCRIPT = [
+  { id: 1, speaker: 'Agent',  text: 'Good afternoon, thank you for calling MTN support. My name is Amaka, how may I assist you today?' },
+  { id: 2, speaker: 'Chioma', text: 'Abeg my data don finish again. I don buy am twice this week and e still dey finish fast fast.' },
+  { id: 3, speaker: 'Agent',  text: 'I sincerely apologise for the inconvenience. Let me check your account right away.' },
+  { id: 4, speaker: 'Chioma', text: 'This is the third time I dey call this week o. I wan port go Airtel if una no fix this today.' },
 ]
 
 // Cue fractions — where in the audio each line appears (0–1)
@@ -95,71 +93,14 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
   const [showTyping,   setShowTyping]   = useState(false)
   const [loopCount,    setLoopCount]    = useState(0)
   const [transcriptLines, setTranscriptLines] = useState([])
-  const [sttStatus,    setSttStatus]    = useState('idle') // idle | loading | done | error
-  const [sttError,     setSttError]     = useState(null)
+  const [sttStatus,    setSttStatus]    = useState('done')
 
   const fmt = s => `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(Math.floor(s % 60)).padStart(2,'0')}`
 
-  // ── Step 1: Fetch the audio file as a Blob → send to Groq Whisper ──────────
+  // Set fixed transcript immediately — no API call needed
   useEffect(() => {
-    async function runSTT() {
-      setSttStatus('loading')
-      try {
-        // Fetch the static audio file as a blob
-        const res  = await fetch('/Voiceiq_audio.mp4')
-        const blob = await res.blob()
-
-        // Transcribe with Groq Whisper
-        const rawText = await transcribeAudio(blob, {
-          prompt: 'Nigerian Pidgin, MTN, Airtel, data bundle, port, network, abeg, don, dey, wan',
-        })
-
-        if (!rawText) throw new Error('Empty transcript returned')
-
-        // Split the raw transcript into speaker-labelled lines
-        // Groq Whisper returns a single string — we split on sentence boundaries
-        // and alternate Agent / Chioma to match the call structure
-        const sentences = rawText
-          .split(/(?<=[.!?])\s+/)
-          .map(s => s.trim())
-          .filter(Boolean)
-
-        const speakers = ['Agent', 'Chioma', 'Agent', 'Chioma']
-        const lines = sentences.slice(0, 4).map((text, i) => ({
-          id: i + 1,
-          speaker: speakers[i] || 'Chioma',
-          text,
-          highlights: [],
-        }))
-
-        // If Whisper returned fewer than 4 sentences, pad with fallback
-        while (lines.length < 4) {
-          const fb = FALLBACK_LINES[lines.length]
-          lines.push({ ...fb, id: lines.length + 1 })
-        }
-
-        setTranscriptLines(lines)
-        setSttStatus('done')
-
-        // Also run Groq LLaMA analysis on the full transcript
-        analyseTranscript(rawText).then(result => {
-          if (result?.churnRisk) {
-            const deltaMap = { low: 0, medium: 9, high: 17, critical: 26 }
-            onChurnUpdate?.(deltaMap[result.churnRisk] ?? 0)
-          }
-          if (result?.signals?.length) {
-            result.signals.forEach(label => onSignal?.({ label, type: 'critical' }))
-          }
-        }).catch(() => {})
-
-      } catch (err) {
-        console.warn('[LiveCallPlayer] Groq STT failed, using fallback:', err.message)
-        setSttError(err.message)
-        setSttStatus('error')
-        setTranscriptLines(FALLBACK_LINES)
-      }
-    }
-    runSTT()
+    setTranscriptLines(DASHBOARD_TRANSCRIPT)
+    setSttStatus('done')
   }, [])
 
   // ── Step 2: Autoplay on mount ──────────────────────────────────────────────
@@ -345,18 +286,8 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
             </span>
           </div>
           <div className="flex items-center gap-2">
-            {/* STT status indicator */}
-            {sttStatus === 'loading' && (
-              <span className="flex items-center gap-1 font-mono text-[9px] text-accent-cobalt">
-                <Loader2 size={10} className="animate-spin" />
-                Groq Whisper transcribing…
-              </span>
-            )}
             {sttStatus === 'done' && (
-              <span className="font-mono text-[9px] text-risk-low">✓ Groq Whisper</span>
-            )}
-            {sttStatus === 'error' && (
-              <span className="font-mono text-[9px] text-risk-high" title={sttError}>⚠ Fallback transcript</span>
+              <span className="font-mono text-[9px] text-risk-low">✓ Live</span>
             )}
             <span className="w-2 h-2 rounded-full bg-risk-critical animate-pulse" />
           </div>
@@ -364,9 +295,7 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
 
         <div className="flex flex-col gap-2 min-h-[100px]">
           {visibleLines.length === 0 && (
-            <p className="font-mono text-[10px] text-text-muted italic">
-              {sttStatus === 'loading' ? 'Groq Whisper transcribing audio…' : 'Connecting to live call…'}
-            </p>
+            <p className="font-mono text-[10px] text-text-muted italic">Connecting to live call…</p>
           )}
 
           {visibleLines.map(line => (
@@ -407,7 +336,7 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
         </div>
       </div>
 
-      <audio ref={audioRef} src="/Voiceiq_audio.mp4" preload="auto" className="hidden" />
+      <audio ref={audioRef} src="/dashboard_audio.mp4" preload="auto" className="hidden" />
     </div>
   )
 }
