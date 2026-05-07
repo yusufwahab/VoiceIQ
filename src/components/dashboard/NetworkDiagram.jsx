@@ -21,7 +21,7 @@ export default function NetworkDiagram({ nodes, onNodeClick }) {
     <div className="flex flex-col gap-1">
       <svg
         viewBox="0 0 400 280"
-        className="w-full rounded-xl bg-bg-base border border-border-default"
+        className="w-full rounded-xl bg-bg-surface border border-border-default"
         style={{ maxHeight: 220 }}
       >
         {/* Dot grid */}

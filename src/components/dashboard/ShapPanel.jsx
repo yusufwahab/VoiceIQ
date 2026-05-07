@@ -64,8 +64,8 @@ export default function ShapPanel({ features, pulsedId, title = 'SHAP FEATURE IM
       </motion.div>
 
       {/* Verdict */}
-      <div className="bg-bg-base border-l-4 border-accent-cobalt p-3 rounded-r-lg">
-        <p className="font-plex text-[12px] text-text-secondary italic leading-relaxed">
+      <div className="bg-bg-elevated border-l-4 border-mtn-blue p-3 rounded-r-lg">
+        <p className="font-plex text-[12px] text-text-primary italic leading-relaxed">
           Chioma is at high churn risk because she explicitly stated intent to port, has contacted support 3 times this week, has not recharged in 9 days, and mentioned Airtel as an alternative. Immediate retention action recommended.
         </p>
       </div>

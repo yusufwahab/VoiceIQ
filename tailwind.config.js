@@ -13,7 +13,7 @@ export default {
         'mtn-blue-dark': '#004C99',
         
         // Background layers
-        'bg-base': '#0A0E1A',
+        'bg-base': '#FFCB05',
         'bg-surface': '#111827',
         'bg-elevated': '#1F2937',
         'bg-overlay': '#374151',

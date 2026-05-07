@@ -422,7 +422,7 @@ export default function ConversationThread({ conversation, suggestedReply }) {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35 }}
-                    className="w-full bg-bg-base border border-border-default border-l-2 border-l-accent-cobalt rounded-lg px-4 py-2.5"
+                    className="w-full bg-bg-elevated border border-border-default border-l-2 border-l-mtn-blue rounded-lg px-4 py-2.5"
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-accent-cobalt animate-pulse" />
@@ -454,7 +454,7 @@ export default function ConversationThread({ conversation, suggestedReply }) {
             onKeyDown={handleKeyDown}
             rows={2}
             placeholder="Type a reply…"
-            className="flex-1 bg-bg-base border border-border-default rounded-xl px-4 py-3 font-plex text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:border-border-active transition-colors"
+            className="flex-1 bg-bg-elevated border border-border-default rounded-xl px-4 py-3 font-plex text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:border-border-active transition-colors"
           />
           <button
             onClick={handleSend}

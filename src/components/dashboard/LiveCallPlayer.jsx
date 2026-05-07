@@ -47,7 +47,7 @@ function highlightText(text) {
     <>
       {parts.map((p, i) =>
         p.highlight
-          ? <mark key={i} className="bg-accent-amber-dim text-accent-cobalt rounded px-0.5 not-italic">{p.text}</mark>
+          ? <mark key={i} className="bg-mtn-yellow/30 text-mtn-yellow rounded px-0.5 not-italic font-semibold">{p.text}</mark>
           : <span key={i}>{p.text}</span>
       )}
     </>
@@ -216,7 +216,7 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
         </div>
 
         {/* ── Audio player ── */}
-        <div className="bg-bg-base border border-border-default rounded-xl px-4 py-3 flex flex-col gap-2">
+        <div className="bg-bg-elevated border border-border-default rounded-xl px-4 py-3 flex flex-col gap-2">
           <div className="flex items-center gap-3">
 
             {/* Live soundwave — replaces play button */}
@@ -277,11 +277,11 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
       </div>
 
       {/* ── Live Transcript ── */}
-      <div className="bg-bg-base border border-border-default rounded-xl p-4 flex flex-col gap-3">
+      <div className="bg-bg-surface border border-border-default rounded-xl p-4 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Radio size={11} className="text-accent-amber" />
-            <span className="font-mono text-[9px] text-accent-amber tracking-widest uppercase">
+            <span className="font-mono text-[9px] text-mtn-yellow tracking-widest uppercase">
               Live Transcript — Pidgin NLP Active
             </span>
           </div>
@@ -306,12 +306,12 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
               transition={{ duration: 0.35 }}
               className="flex gap-2"
             >
-              <span className={`font-mono text-[10px] shrink-0 mt-0.5 font-bold ${
-                line.speaker === 'Agent' ? 'text-accent-cobalt' : 'text-accent-amber'
+              <span className={`font-mono text-[10px] shrink-0 mt-0.5 ${
+                line.speaker === 'Agent' ? 'text-mtn-blue' : 'text-mtn-yellow'
               }`}>
                 {line.speaker === 'Agent' ? 'AGT' : 'SUB'}
               </span>
-              <p className="font-plex text-[12px] text-text-secondary leading-relaxed">
+              <p className="font-plex text-[12px] text-text-primary leading-relaxed">
                 {highlightText(line.text)}
               </p>
             </motion.div>
@@ -319,7 +319,7 @@ export default function LiveCallPlayer({ subscriber, onSignal, onChurnUpdate }) 
 
           {showTyping && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2 items-center">
-              <span className="font-mono text-[10px] text-accent-amber shrink-0 font-bold">SUB</span>
+              <span className="font-mono text-[10px] text-mtn-yellow shrink-0">SUB</span>
               <div className="flex gap-1 items-center">
                 <span className="typing-dot w-1.5 h-1.5 rounded-full bg-text-muted inline-block" />
                 <span className="typing-dot w-1.5 h-1.5 rounded-full bg-text-muted inline-block" />
