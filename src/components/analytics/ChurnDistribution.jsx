@@ -22,7 +22,7 @@ export default function ChurnDistribution({ distribution }) {
       <div className="p-4" style={{ height: 240 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={distribution} layout="vertical" margin={{ left: 8, right: 24, top: 4, bottom: 4 }}>
-            <CartesianGrid horizontal={false} stroke="rgba(79,126,255,0.08)" />
+            <CartesianGrid horizontal={false} stroke="rgba(255,203,5,0.08)" />
             <XAxis
               type="number"
               tick={{ fill: '#94A3B8', fontSize: 10, fontFamily: 'JetBrains Mono' }}
@@ -38,7 +38,7 @@ export default function ChurnDistribution({ distribution }) {
               tickLine={false}
               width={110}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(79,126,255,0.05)' }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,203,5,0.05)' }} />
             <Bar dataKey="value" radius={[0, 4, 4, 0]} animationDuration={1200}>
               {distribution.map((entry, i) => (
                 <Cell key={i} fill={entry.color} fillOpacity={0.85} />

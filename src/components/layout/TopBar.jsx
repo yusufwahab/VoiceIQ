@@ -14,12 +14,12 @@ export default function TopBar({ title, subtitle }) {
           <input
             type="text"
             placeholder="Search subscribers..."
-            className="bg-bg-base border border-border-default rounded-lg pl-8 pr-3 py-1.5 font-plex text-xs text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-border-active w-48 transition-colors"
+            className="bg-bg-base border border-border-default rounded-lg pl-8 pr-3 py-1.5 font-plex text-xs text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow w-48 transition-colors"
           />
         </div>
-        <button className="relative w-8 h-8 flex items-center justify-center rounded-lg hover:bg-bg-overlay transition-colors text-text-secondary hover:text-text-primary focus-visible:outline-2 focus-visible:outline-accent-cobalt">
+        <button className="relative w-8 h-8 flex items-center justify-center rounded-lg hover:bg-bg-overlay transition-colors text-text-secondary hover:text-text-primary focus-visible:outline-2 focus-visible:outline-mtn-yellow">
           <Bell size={16} />
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-accent-amber" />
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-mtn-yellow shadow-sm shadow-mtn-yellow" />
         </button>
       </div>
     </header>

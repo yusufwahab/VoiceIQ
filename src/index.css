@@ -19,15 +19,15 @@
     padding: 0;
   }
   body {
-    background-color: #080D1A;
-    color: #F1F5F9;
+    background-color: #0A0E1A;
+    color: #F9FAFB;
     font-family: 'IBM Plex Sans', sans-serif;
     font-size: 14px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
   :focus-visible {
-    outline: 2px solid #4F7EFF;
+    outline: 2px solid #FFCB05;
     outline-offset: 2px;
   }
   ::-webkit-scrollbar {
@@ -35,10 +35,10 @@
     height: 4px;
   }
   ::-webkit-scrollbar-track {
-    background: #080D1A;
+    background: #0A0E1A;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(79,126,255,0.3);
+    background: rgba(255,203,5,0.4);
     border-radius: 2px;
   }
 }

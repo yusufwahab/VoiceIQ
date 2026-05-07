@@ -2,8 +2,8 @@ import Panel, { PanelHeader } from '../ui/Panel'
 
 const severityColor = {
   critical: 'text-risk-critical',
-  amber: 'text-accent-amber',
-  cobalt: 'text-accent-cobalt',
+  yellow: 'text-mtn-yellow',
+  blue: 'text-mtn-blue',
 }
 
 export default function SignalTable({ signals }) {

@@ -44,14 +44,14 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-bg-base flex items-center justify-center px-6 py-12 relative overflow-hidden">
       {/* Background glow */}
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-accent-violet opacity-[0.03] blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-accent-cobalt opacity-[0.03] blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-mtn-blue opacity-[0.03] blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-mtn-yellow opacity-[0.03] blur-[100px] pointer-events-none" />
 
       {/* Back to landing */}
       <Link
         to="/"
         className="absolute top-6 left-6 flex items-center gap-2 font-plex text-sm text-text-secondary hover:text-text-primary transition-colors">
-        <Zap size={16} className="text-accent-cobalt" />
+        <Zap size={16} className="text-mtn-yellow" />
         <span className="font-grotesk font-bold">VoiceIQ</span>
       </Link>
 
@@ -65,8 +65,8 @@ export default function SignUpPage() {
           {/* Left — Benefits */}
           <div className="hidden md:flex flex-col justify-center">
             <div className="mb-6">
-              <div className="w-12 h-12 rounded-xl bg-accent-cobalt flex items-center justify-center mb-4">
-                <Zap size={20} className="text-white" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-mtn-yellow to-mtn-yellow-dark flex items-center justify-center mb-4 shadow-lg shadow-mtn-yellow/20">
+                <Zap size={20} className="text-bg-base" />
               </div>
               <h2 className="font-grotesk font-bold text-3xl text-text-primary mb-3">
                 Start Preventing Churn Today
@@ -79,8 +79,8 @@ export default function SignUpPage() {
             <div className="space-y-3">
               {benefits.map((benefit, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-accent-cobalt-dim border border-accent-cobalt/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle size={12} className="text-accent-cobalt" />
+                  <div className="w-5 h-5 rounded-full bg-primary-dim border border-mtn-yellow/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <CheckCircle size={12} className="text-mtn-yellow" />
                   </div>
                   <span className="font-plex text-sm text-text-secondary">{benefit}</span>
                 </div>
@@ -89,7 +89,7 @@ export default function SignUpPage() {
 
             <div className="mt-8 bg-bg-surface border border-border-default rounded-xl p-4">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-cobalt to-accent-violet flex items-center justify-center text-white font-grotesk font-bold text-xs">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-mtn-yellow to-mtn-blue flex items-center justify-center text-bg-base font-grotesk font-bold text-xs shadow-md">
                   AO
                 </div>
                 <div>
@@ -124,7 +124,7 @@ export default function SignUpPage() {
                     onChange={e => handleChange('name', e.target.value)}
                     placeholder="Amaka Osei"
                     required
-                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-active transition-colors"
+                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow transition-colors"
                   />
                 </div>
               </div>
@@ -140,7 +140,7 @@ export default function SignUpPage() {
                     onChange={e => handleChange('email', e.target.value)}
                     placeholder="amaka@mtn.ng"
                     required
-                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-active transition-colors"
+                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow transition-colors"
                   />
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function SignUpPage() {
                     onChange={e => handleChange('company', e.target.value)}
                     placeholder="MTN Nigeria"
                     required
-                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-active transition-colors"
+                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow transition-colors"
                   />
                 </div>
               </div>
@@ -173,7 +173,7 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     required
                     minLength={8}
-                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-10 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-active transition-colors"
+                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-10 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow transition-colors"
                   />
                   <button
                     type="button"
@@ -196,7 +196,7 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     required
                     minLength={8}
-                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-10 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-active transition-colors"
+                    className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-10 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow transition-colors"
                   />
                   <button
                     type="button"
@@ -209,7 +209,7 @@ export default function SignUpPage() {
 
               {/* Terms */}
               <label className="flex items-start gap-2 cursor-pointer">
-                <input type="checkbox" required className="w-4 h-4 rounded border-border-default bg-bg-base accent-accent-cobalt mt-0.5 shrink-0" />
+                <input type="checkbox" required className="w-4 h-4 rounded border-border-default bg-bg-base accent-mtn-yellow mt-0.5 shrink-0" />
                 <span className="font-plex text-xs text-text-secondary">
                   I agree to the Terms of Service and Privacy Policy
                 </span>
@@ -219,7 +219,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-accent-cobalt hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white font-plex font-semibold text-sm px-4 py-3 rounded-lg transition-all flex items-center justify-center gap-2">
+                className="w-full bg-mtn-yellow hover:bg-mtn-yellow-light active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-bg-base font-plex font-semibold text-sm px-4 py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-md shadow-mtn-yellow/20">
                 {loading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -236,7 +236,7 @@ export default function SignUpPage() {
             {/* Sign in link */}
             <div className="mt-6 text-center">
               <span className="font-plex text-sm text-text-secondary">Already have an account? </span>
-              <Link to="/signin" className="font-plex text-sm text-accent-cobalt hover:underline font-semibold">
+              <Link to="/signin" className="font-plex text-sm text-mtn-blue hover:underline font-semibold">
                 Sign in
               </Link>
             </div>
@@ -245,8 +245,8 @@ export default function SignUpPage() {
 
         {/* Demo hint */}
         <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-accent-amber-dim border border-accent-amber/30 rounded-lg px-3 py-2">
-            <span className="font-mono text-[10px] text-accent-amber tracking-widest">DEMO MODE</span>
+          <div className="inline-flex items-center gap-2 bg-primary-dim border border-mtn-yellow/30 rounded-lg px-3 py-2">
+            <span className="font-mono text-[10px] text-mtn-yellow tracking-widest">DEMO MODE</span>
             <span className="font-plex text-xs text-text-secondary">All fields are optional for demo</span>
           </div>
         </div>

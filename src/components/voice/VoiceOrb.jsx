@@ -36,30 +36,30 @@ export default function VoiceOrb({ state = 'idle', onClick, disabled = false, si
 
   const stateConfig = {
     idle: {
-      ring:    'border-accent-cobalt/40',
-      bg:      'bg-accent-cobalt-dim hover:bg-accent-cobalt/20',
-      icon:    <Mic size={sz.icon} className="text-accent-cobalt" />,
+      ring:    'border-mtn-yellow/40',
+      bg:      'bg-primary-dim hover:bg-primary-dim/80',
+      icon:    <Mic size={sz.icon} className="text-mtn-yellow" />,
       label:   'Speak',
       pulse:   false,
     },
     recording: {
-      ring:    'border-risk-critical',
-      bg:      'bg-[rgba(248,113,113,0.15)]',
-      icon:    <Square size={sz.icon} className="text-risk-critical" fill="currentColor" />,
+      ring:    'border-status-error',
+      bg:      'bg-status-error/15',
+      icon:    <Square size={sz.icon} className="text-status-error" fill="currentColor" />,
       label:   fmt(elapsed),
       pulse:   true,
     },
     processing: {
-      ring:    'border-accent-cobalt',
-      bg:      'bg-accent-cobalt-dim',
-      icon:    <Loader2 size={sz.icon} className="text-accent-cobalt animate-spin" />,
+      ring:    'border-mtn-blue',
+      bg:      'bg-secondary-dim',
+      icon:    <Loader2 size={sz.icon} className="text-mtn-blue animate-spin" />,
       label:   'Processing…',
       pulse:   false,
     },
     error: {
-      ring:    'border-risk-high',
-      bg:      'bg-[rgba(251,146,60,0.12)]',
-      icon:    <MicOff size={sz.icon} className="text-risk-high" />,
+      ring:    'border-status-warning',
+      bg:      'bg-status-warning/12',
+      icon:    <MicOff size={sz.icon} className="text-status-warning" />,
       label:   'Error',
       pulse:   false,
     },
@@ -78,12 +78,12 @@ export default function VoiceOrb({ state = 'idle', onClick, disabled = false, si
           flex items-center justify-center
           transition-all duration-200
           disabled:opacity-50 disabled:cursor-not-allowed
-          focus-visible:outline-2 focus-visible:outline-accent-cobalt
+          focus-visible:outline-2 focus-visible:outline-mtn-yellow
         `}
       >
         {/* Pulse ring for recording state */}
         {cfg.pulse && (
-          <span className="absolute inset-0 rounded-full border-2 border-risk-critical animate-ping opacity-40" />
+          <span className="absolute inset-0 rounded-full border-2 border-status-error animate-ping opacity-40" />
         )}
         <AnimatePresence mode="wait">
           <motion.span
@@ -98,7 +98,7 @@ export default function VoiceOrb({ state = 'idle', onClick, disabled = false, si
         </AnimatePresence>
       </motion.button>
 
-      <span className={`font-mono ${sz.text} ${state === 'recording' ? 'text-risk-critical' : 'text-text-muted'} tabular-nums`}>
+      <span className={`font-mono ${sz.text} ${state === 'recording' ? 'text-status-error' : 'text-text-muted'} tabular-nums`}>
         {cfg.label}
       </span>
     </div>

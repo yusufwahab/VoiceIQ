@@ -28,8 +28,8 @@ export default function Sidebar() {
     <aside className="w-[240px] bg-bg-surface border-r border-border-default flex flex-col h-full shrink-0">
       {/* Logo */}
       <div className="px-5 py-4 border-b border-border-default flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-lg bg-accent-cobalt flex items-center justify-center">
-          <Zap size={16} className="text-white" />
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-mtn-yellow to-mtn-yellow-dark flex items-center justify-center shadow-lg shadow-mtn-yellow/20">
+          <Zap size={16} className="text-bg-base" />
         </div>
         <div>
           <div className="font-grotesk font-bold text-base text-text-primary leading-none">VoiceIQ</div>
@@ -47,13 +47,13 @@ export default function Sidebar() {
               to={to}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group ${
                 isActive
-                  ? 'bg-accent-cobalt-dim text-accent-cobalt border border-border-active'
-                  : 'text-text-secondary hover:text-text-primary hover:bg-bg-overlay'
+                  ? 'bg-primary-dim text-mtn-yellow border border-border-active shadow-sm'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated'
               }`}
             >
-              <Icon size={16} className={isActive ? 'text-accent-cobalt' : 'text-text-muted group-hover:text-text-secondary'} />
+              <Icon size={16} className={isActive ? 'text-mtn-yellow' : 'text-text-muted group-hover:text-text-secondary'} />
               <span className="font-plex text-sm">{label}</span>
-              {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-accent-cobalt" />}
+              {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-mtn-yellow shadow-sm shadow-mtn-yellow" />}
             </NavLink>
           )
         })}
@@ -62,18 +62,18 @@ export default function Sidebar() {
       {/* Agent info */}
       <div className="px-4 py-3 border-t border-border-default">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-accent-cobalt to-accent-violet flex items-center justify-center text-white font-grotesk font-bold text-xs">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-mtn-yellow to-mtn-blue flex items-center justify-center text-bg-base font-grotesk font-bold text-xs shadow-md">
             AO
           </div>
           <div>
             <div className="font-plex text-xs text-text-primary">Amaka Osei</div>
             <div className="font-mono text-[9px] text-text-muted">Agent · Lagos CC</div>
           </div>
-          <div className="ml-auto w-2 h-2 rounded-full bg-risk-low" title="Online" />
+          <div className="ml-auto w-2 h-2 rounded-full bg-status-success shadow-sm shadow-status-success" title="Online" />
         </div>
         <button
           onClick={handleSignOut}
-          className="mt-3 w-full flex items-center gap-2 px-3 py-2 rounded-lg text-text-muted hover:text-risk-critical hover:bg-[rgba(248,113,113,0.08)] transition-all text-left">
+          className="mt-3 w-full flex items-center gap-2 px-3 py-2 rounded-lg text-text-muted hover:text-status-error hover:bg-status-error/10 transition-all text-left">
           <LogOut size={14} />
           <span className="font-plex text-xs">Sign Out</span>
         </button>

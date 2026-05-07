@@ -3,7 +3,7 @@ import RiskBadge from '../ui/RiskBadge'
 
 const outcomeMap = {
   Accepted: 'low',
-  Pending: 'amber',
+  Pending: 'yellow',
   Declined: 'critical',
 }
 

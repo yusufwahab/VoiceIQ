@@ -23,13 +23,13 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen bg-bg-base flex items-center justify-center px-6 relative overflow-hidden">
       {/* Background glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-accent-cobalt opacity-[0.03] blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-mtn-yellow opacity-[0.03] blur-[120px] pointer-events-none" />
 
       {/* Back to landing */}
       <Link
         to="/"
         className="absolute top-6 left-6 flex items-center gap-2 font-plex text-sm text-text-secondary hover:text-text-primary transition-colors">
-        <Zap size={16} className="text-accent-cobalt" />
+        <Zap size={16} className="text-mtn-yellow" />
         <span className="font-grotesk font-bold">VoiceIQ</span>
       </Link>
 
@@ -43,8 +43,8 @@ export default function SignInPage() {
         <div className="bg-bg-surface border border-border-default rounded-2xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-accent-cobalt mx-auto flex items-center justify-center mb-4">
-              <Zap size={20} className="text-white" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-mtn-yellow to-mtn-yellow-dark mx-auto flex items-center justify-center mb-4 shadow-lg shadow-mtn-yellow/20">
+              <Zap size={20} className="text-bg-base" />
             </div>
             <h1 className="font-grotesk font-bold text-2xl text-text-primary mb-2">Welcome Back</h1>
             <p className="font-plex text-sm text-text-secondary">
@@ -65,7 +65,7 @@ export default function SignInPage() {
                   onChange={e => setEmail(e.target.value)}
                   placeholder="amaka@mtn.ng"
                   required
-                  className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-active transition-colors"
+                  className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-4 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow transition-colors"
                 />
               </div>
             </div>
@@ -81,7 +81,7 @@ export default function SignInPage() {
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-10 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-active transition-colors"
+                  className="w-full bg-bg-base border border-border-default rounded-lg pl-10 pr-10 py-2.5 font-plex text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-mtn-yellow transition-colors"
                 />
                 <button
                   type="button"
@@ -95,10 +95,10 @@ export default function SignInPage() {
             {/* Remember + Forgot */}
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded border-border-default bg-bg-base accent-accent-cobalt" />
+                <input type="checkbox" className="w-4 h-4 rounded border-border-default bg-bg-base accent-mtn-yellow" />
                 <span className="font-plex text-xs text-text-secondary">Remember me</span>
               </label>
-              <button type="button" className="font-plex text-xs text-accent-cobalt hover:underline">
+              <button type="button" className="font-plex text-xs text-mtn-blue hover:underline">
                 Forgot password?
               </button>
             </div>
@@ -107,7 +107,7 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-accent-cobalt hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white font-plex font-semibold text-sm px-4 py-3 rounded-lg transition-all flex items-center justify-center gap-2">
+              className="w-full bg-mtn-yellow hover:bg-mtn-yellow-light active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-bg-base font-plex font-semibold text-sm px-4 py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-md shadow-mtn-yellow/20">
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -131,7 +131,7 @@ export default function SignInPage() {
           {/* Sign up link */}
           <div className="text-center">
             <span className="font-plex text-sm text-text-secondary">Don't have an account? </span>
-            <Link to="/signup" className="font-plex text-sm text-accent-cobalt hover:underline font-semibold">
+            <Link to="/signup" className="font-plex text-sm text-mtn-blue hover:underline font-semibold">
               Create one now
             </Link>
           </div>
@@ -139,8 +139,8 @@ export default function SignInPage() {
 
         {/* Demo hint */}
         <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-accent-amber-dim border border-accent-amber/30 rounded-lg px-3 py-2">
-            <span className="font-mono text-[10px] text-accent-amber tracking-widest">DEMO MODE</span>
+          <div className="inline-flex items-center gap-2 bg-primary-dim border border-mtn-yellow/30 rounded-lg px-3 py-2">
+            <span className="font-mono text-[10px] text-mtn-yellow tracking-widest">DEMO MODE</span>
             <span className="font-plex text-xs text-text-secondary">Any email/password will work</span>
           </div>
         </div>

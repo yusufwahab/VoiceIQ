@@ -153,9 +153,34 @@ export default function ConversationThread({ conversation, suggestedReply }) {
   const threadRef  = useRef(null)
 
   const [reply,      setReply]      = useState(suggestedReply)
-  const [phase,      setPhase]      = useState('preview')   // 'preview' | 'importing' | 'live'
+  const [phase,      setPhase]      = useState('preview')
   const [messages,   setMessages]   = useState([])
   const [churnScore, setChurnScore] = useState(61)
+  const [sent,       setSent]       = useState(false)
+
+  function handleSend() {
+    const text = reply.trim()
+    if (!text) return
+    setMessages(prev => [...prev, {
+      id: `agent-${Date.now()}`,
+      type: 'agent',
+      text,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    }])
+    setReply('')
+    setSent(true)
+    setTimeout(() => setSent(false), 2000)
+    setTimeout(() => {
+      threadRef.current?.scrollTo({ top: threadRef.current.scrollHeight, behavior: 'smooth' })
+    }, 50)
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+  }
 
   const churnColor = churnScore >= 80 ? 'text-risk-critical'
     : churnScore >= 60 ? 'text-risk-high'
@@ -337,6 +362,25 @@ export default function ConversationThread({ conversation, suggestedReply }) {
             </motion.div>
 
             {messages.map(msg => {
+              if (msg.type === 'agent') {
+                return (
+                  <motion.div
+                    key={msg.id}
+                    initial={{ opacity: 0, x: -20, scale: 0.97 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex justify-start"
+                  >
+                    <div className="max-w-[72%] bg-accent-cobalt-dim border border-accent-cobalt/20 border-l-2 border-l-accent-cobalt rounded-2xl rounded-tl-sm px-4 py-2.5">
+                      <span className="font-mono text-[8px] text-accent-cobalt tracking-widest uppercase block mb-1">
+                        Agent · {msg.timestamp}
+                      </span>
+                      <p className="font-plex text-sm text-text-primary leading-relaxed">{msg.text}</p>
+                    </div>
+                  </motion.div>
+                )
+              }
+
               if (msg.type === 'subscriber') {
                 return (
                   <motion.div
@@ -407,11 +451,21 @@ export default function ConversationThread({ conversation, suggestedReply }) {
           <textarea
             value={reply}
             onChange={e => setReply(e.target.value)}
+            onKeyDown={handleKeyDown}
             rows={2}
+            placeholder="Type a reply…"
             className="flex-1 bg-bg-base border border-border-default rounded-xl px-4 py-3 font-plex text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:border-border-active transition-colors"
           />
-          <button className="bg-accent-cobalt hover:brightness-110 active:scale-95 text-white rounded-xl px-4 flex items-center justify-center transition-all focus-visible:outline-2 focus-visible:outline-accent-cobalt">
-            <Send size={16} />
+          <button
+            onClick={handleSend}
+            disabled={!reply.trim()}
+            className={`rounded-xl px-4 flex items-center justify-center transition-all focus-visible:outline-2 focus-visible:outline-accent-cobalt active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ${
+              sent
+                ? 'bg-risk-low text-bg-base'
+                : 'bg-accent-cobalt hover:brightness-110 text-white'
+            }`}
+          >
+            {sent ? <span className="font-mono text-[11px] font-bold">✓</span> : <Send size={16} />}
           </button>
         </div>
       </div>

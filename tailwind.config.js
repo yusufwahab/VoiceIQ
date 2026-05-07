@@ -4,26 +4,53 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bg-base': '#080D1A',
-        'bg-surface': '#0F1729',
-        'bg-elevated': '#162035',
-        'bg-overlay': '#1C2A42',
-        'accent-cobalt': '#4F7EFF',
-        'accent-cobalt-dim': 'rgba(79,126,255,0.12)',
-        'accent-amber': '#F5C518',
-        'accent-amber-dim': 'rgba(245,197,24,0.12)',
-        'accent-violet': '#7C6FFF',
-        'risk-critical': '#F87171',
-        'risk-high': '#FB923C',
-        'risk-medium': '#F5C518',
-        'risk-low': '#34D399',
-        'text-primary': '#F1F5F9',
-        'text-secondary': '#94A3B8',
-        'text-muted': '#4B5563',
-        'text-cobalt': '#4F7EFF',
-        'text-amber': '#F5C518',
-        'border-default': 'rgba(79,126,255,0.12)',
-        'border-active': 'rgba(79,126,255,0.4)',
+        // MTN Brand Colors
+        'mtn-yellow': '#FFCB05',
+        'mtn-yellow-light': '#FFD633',
+        'mtn-yellow-dark': '#E6B800',
+        'mtn-blue': '#0066CC',
+        'mtn-blue-light': '#3385D6',
+        'mtn-blue-dark': '#004C99',
+        
+        // Background layers
+        'bg-base': '#0A0E1A',
+        'bg-surface': '#111827',
+        'bg-elevated': '#1F2937',
+        'bg-overlay': '#374151',
+        
+        // Primary (MTN Yellow)
+        'primary': '#FFCB05',
+        'primary-dim': 'rgba(255,203,5,0.1)',
+        'primary-hover': '#FFD633',
+        
+        // Secondary (Blue)
+        'secondary': '#0066CC',
+        'secondary-dim': 'rgba(0,102,204,0.1)',
+        'secondary-hover': '#3385D6',
+        
+        // Status colors
+        'status-success': '#10B981',
+        'status-warning': '#F59E0B',
+        'status-error': '#EF4444',
+        'status-info': '#3B82F6',
+        
+        // Risk levels
+        'risk-critical': '#DC2626',
+        'risk-high': '#F97316',
+        'risk-medium': '#FFCB05',
+        'risk-low': '#10B981',
+        
+        // Text
+        'text-primary': '#F9FAFB',
+        'text-secondary': '#D1D5DB',
+        'text-muted': '#6B7280',
+        'text-yellow': '#FFCB05',
+        'text-blue': '#60A5FA',
+        
+        // Borders
+        'border-default': 'rgba(255,203,5,0.15)',
+        'border-active': 'rgba(255,203,5,0.5)',
+        'border-subtle': 'rgba(156,163,175,0.2)',
       },
       fontFamily: {
         grotesk: ['"Space Grotesk"', 'sans-serif'],
@@ -31,7 +58,7 @@ export default {
         mono: ['"JetBrains Mono"', 'monospace'],
       },
       borderColor: {
-        DEFAULT: 'rgba(79,126,255,0.12)',
+        DEFAULT: 'rgba(255,203,5,0.15)',
       },
     },
   },
